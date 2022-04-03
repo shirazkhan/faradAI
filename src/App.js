@@ -9,7 +9,13 @@ export default function App() {
   const initialState = {
     email: '',
     password: '',
-    isAuthenticated: false
+    isAuthenticated: false,
+    countrys: [],
+    subDivisions: [],
+    countryInput: '',
+    subDivisionInput: '',
+    dataRender: {},
+    flyTo: []
   }
 
   const reducer = (state, action) => {
@@ -20,6 +26,10 @@ export default function App() {
         return { ...state, password: action.value }
       case 'CHECK_CREDENTIALS':
         return { ...state, isAuthenticated: true }
+      case 'HANDLE_SUBDIVISION_INPUT':
+        return { ...state, subDivisionInput: action.value }
+      case 'HANDLE_COUNTRY_INPUT':
+        return { ...state, countryInput: action.value }
       default:
         throw new Error();
     }
