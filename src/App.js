@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import LoginPage from './LoginPage';
+import MapInterface from './MapInterface';
 
 export const GlobalStateContext = React.createContext();
 
@@ -18,7 +19,8 @@ export default function App() {
       case 'UPDATE_PASSWORD':
         return { ...state, password: action.value }
       case 'CHECK_CREDENTIALS':
-        return { ...state }
+
+        return { ...state, isAuthenticated: true }
       default:
         throw new Error();
     }
@@ -28,7 +30,7 @@ export default function App() {
 
   return (
     <GlobalStateContext.Provider value={{ globalState, dispatch }}>
-      <LoginPage />
+      {globalState.isAuthenticated ? <MapInterface /> : <LoginPage />}
     </GlobalStateContext.Provider>
   )
 }

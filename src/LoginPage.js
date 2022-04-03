@@ -11,7 +11,7 @@ const Container = styled.div`
     align-items: center;
 `;
 
-const LoginBox = styled.div`
+const LoginBox = styled.form`
     height: 500px;
     width: 80%;
     max-width: 600px;
@@ -53,23 +53,28 @@ export default function LoginPage() {
 
     const { globalState, dispatch } = useContext(GlobalStateContext);
 
+    const handleAuth = e => {
+        e.preventDefault();
+        dispatch({ type: 'CHECK_CREDENTIALS' });
+    }
+
     return (
         <>
             <Container>
-                <LoginBox>
+                <LoginBox onSubmit = {handleAuth} >
                     <Logo src='/faradaiLogo.png' />
                     <Input
                         name='email'
                         type='email'
                         value={globalState.email}
-                        onChange={e => dispatch({type: 'UPDATE_EMAIL', value: e.target.value})}
+                        onChange={e => dispatch({ type: 'UPDATE_EMAIL', value: e.target.value })}
                         placeholder='Email Address'
                     />
                     <Input
                         name='password'
                         value={globalState.password}
                         type='password'
-                        onChange={e => dispatch({type: 'UPDATE_PASSWORD', value: e.target.value})}
+                        onChange={e => dispatch({ type: 'UPDATE_PASSWORD', value: e.target.value })}
                         minLength="8"
                         placeholder='Password' />
                     <LoginButton>Login</LoginButton>
