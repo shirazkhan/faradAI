@@ -88,7 +88,7 @@ export default function MapInterface() {
           </Input>
           <Button>Search</Button>
         </form>
-        <Button>Clear</Button>
+        <Button onClick={() => dispatch({type: 'CLEAR_MAP'})}>Clear</Button>
       </MainBar>
       <Container center={[51.505, -0.09]} zoom={13}>
         {globalState.dataRender

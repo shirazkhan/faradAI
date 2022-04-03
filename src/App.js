@@ -27,11 +27,13 @@ export default function App() {
       case 'CHECK_CREDENTIALS':
         return { ...state, isAuthenticated: true }
       case 'HANDLE_SUBDIVISION_INPUT':
-        return { ...state, subDivisionInput: action.value }
+        return { ...state, subDivisionInput: action.value, countryInput: '' }
       case 'HANDLE_COUNTRY_INPUT':
-        return { ...state, countryInput: action.value }
+        return { ...state, countryInput: action.value, subDivisionInput: '' }
       case 'HANDLE_SEARCH':
         return { ...state, dataRender: action.value }
+      case 'CLEAR_MAP':
+        return { ...state, dataRender: '', subDivisionInput: '', countryInput: '' }
       default:
         throw new Error();
     }
