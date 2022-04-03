@@ -11,7 +11,7 @@ const Container = styled(MapContainer)`
     position: relative;
 `
 
-const MainBar = styled.div`
+const MainBar = styled.form`
     width: 80%;
     height: 65px;
     position: absolute;
@@ -53,27 +53,26 @@ export default function MapInterface() {
   const handleSearch = e => {
     e.preventDefault();
     axios.get('admin1.json')
-    .then(res => {
-      const filteredData =
-      {
+      .then(res => {
+        const filteredData =
+        {
           ...res.data,
           features: res.data.features.filter(s =>
-              globalState.subDivisionInput
-                  ? typeof s.properties.name === 'string' && s.properties.name.toLowerCase().includes(globalState.subDivisionInput.toLowerCase())
-                  : globalState.countryInput
-                      ? s.properties.country.toLowerCase().includes(globalState.countryInput.toLowerCase())
-                      : s
+            globalState.subDivisionInput
+              ? typeof s.properties.name === 'string' && s.properties.name.toLowerCase().includes(globalState.subDivisionInput.toLowerCase())
+              : globalState.countryInput
+              ? s.properties.country.toLowerCase().includes(globalState.countryInput.toLowerCase())
+              : s
           )
-      }
-      dispatch({type: 'HANDLE_SEARCH', value: filteredData});
-    })
-    .catch(err => console.log(err))
-}
+        }
+        dispatch({ type: 'HANDLE_SEARCH', value: filteredData });
+      })
+      .catch(err => console.log(err))
+  }
 
   return (
     <>
-      <MainBar>
-        <form onSubmit={handleSearch}>
+      <MainBar onSubmit={handleSearch}>
           <Input
             value={globalState.subDivisionInput}
             onChange={e => dispatch({ type: 'HANDLE_SUBDIVISION_INPUT', value: e.target.value })}
@@ -87,8 +86,7 @@ export default function MapInterface() {
             placeholder='Country'>
           </Input>
           <Button>Search</Button>
-        </form>
-        <Button onClick={() => dispatch({type: 'CLEAR_MAP'})}>Clear</Button>
+        <Button type = 'button' onClick={() => dispatch({ type: 'CLEAR_MAP' })}>Clear</Button>
       </MainBar>
       <Container center={[51.505, -0.09]} zoom={13}>
         {globalState.dataRender
