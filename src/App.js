@@ -9,7 +9,7 @@ export default function App() {
   const initialState = {
     email: '',
     password: '',
-    isAuthenticated: true,
+    isAuthenticated: false,
     countrys: [],
     subDivisions: [],
     countryInput: '',

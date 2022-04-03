@@ -5,25 +5,37 @@ import { GlobalStateContext } from './App';
 const Container = styled.div`
     height: 100vh;
     width: 100vw;
-    background: #8c6900;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(-45deg, #000000, #5588ff, #3dedff, #23a6d5, #49ffff, #ffffff);
+	background-size: 200% 200%;
+	animation: gradient 15s ease infinite;
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
 `;
 
 const LoginBox = styled.form`
     height: 500px;
     width: 80%;
     max-width: 600px;
-    background: white;
     border-radius: 25px;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 25px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: saturate(180%) blur(10px);
 `;
 
 const Input = styled.input`
