@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { GlobalStateContext } from './App';
 
 const Container = styled.div`
     height: 100vh;
@@ -49,13 +50,28 @@ const Logo = styled.img`
 `;
 
 export default function LoginPage() {
+
+    const { globalState, dispatch } = useContext(GlobalStateContext);
+
     return (
         <>
             <Container>
                 <LoginBox>
                     <Logo src='/faradaiLogo.png' />
-                    <Input name='email' type='email' placeholder='Email Address' />
-                    <Input name='password' type='password' minLength="8" placeholder='Password' />
+                    <Input
+                        name='email'
+                        type='email'
+                        value={globalState.email}
+                        onChange={e => dispatch({type: 'UPDATE_EMAIL', value: e.target.value})}
+                        placeholder='Email Address'
+                    />
+                    <Input
+                        name='password'
+                        value={globalState.password}
+                        type='password'
+                        onChange={e => dispatch({type: 'UPDATE_PASSWORD', value: e.target.value})}
+                        minLength="8"
+                        placeholder='Password' />
                     <LoginButton>Login</LoginButton>
                 </LoginBox>
             </Container>

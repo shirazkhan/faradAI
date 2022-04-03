@@ -6,26 +6,28 @@ export const GlobalStateContext = React.createContext();
 export default function App() {
 
   const initialState = {
-    email: 'bob@hello.com',
-    password: '1234567890',
+    email: '',
+    password: '',
     isAuthenticated: false
   }
 
   const reducer = (state, action) => {
     switch (action.type) {
       case 'UPDATE_EMAIL':
-        return { ...state }
+        return { ...state, email: action.value }
       case 'UPDATE_PASSWORD':
+        return { ...state, password: action.value }
+      case 'CHECK_CREDENTIALS':
         return { ...state }
-      case 'TOGGLE_AUTHENTICATION':
-        return { ...state }
+      default:
+        throw new Error();
     }
   }
 
   const [globalState, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <GlobalStateContext.Provider value={{globalState, dispatch}}>
+    <GlobalStateContext.Provider value={{ globalState, dispatch }}>
       <LoginPage />
     </GlobalStateContext.Provider>
   )
