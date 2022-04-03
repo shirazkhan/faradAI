@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import LoginPage from './LoginPage';
 
 export const GlobalStateContext = React.createContext();
 
@@ -25,7 +26,7 @@ export default function App() {
 
   return (
     <GlobalStateContext.Provider value={{globalState, dispatch}}>
-      App
+      <LoginPage />
     </GlobalStateContext.Provider>
   )
 }
