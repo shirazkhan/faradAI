@@ -1,5 +1,5 @@
-import React, { useEffect, useContext } from 'react';
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import React, { useRef, useEffect, useContext } from 'react';
+import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
 import styled from 'styled-components';
 import { GlobalStateContext } from './App';
 import 'leaflet/dist/leaflet.css';
@@ -88,9 +88,17 @@ const SideMenuItem = styled.div`
     padding: 0 10px;
 `;
 
+function SetView({ coords }) {
+  const map = useMap();
+  map.setView(coords, map.getZoom());
+
+  return null;
+}
+
 export default function MapInterface() {
 
   const { globalState, dispatch } = useContext(GlobalStateContext);
+  const animateRef = useRef(false);
 
   const processData = () => {
 
@@ -98,13 +106,13 @@ export default function MapInterface() {
 
   useEffect(() => {
     const preProcessor = () =>
-    axios.get('admin1.json')
-      .then(res => {
-        const flatCoords = res.data.features.map(s => {
-          return { properties: s.properties, coordinates: s.geometry.coordinates[0].flat() }
+      axios.get('admin1.json')
+        .then(res => {
+          const flatCoords = res.data.features.map(s => {
+            return { properties: s.properties, coordinates: s.geometry.coordinates[0].flat() }
+          })
+          dispatch({ type: 'PREPROCESS_DATA', value: flatCoords })
         })
-        dispatch({ type: 'PREPROCESS_DATA', value: flatCoords })
-      })
 
     preProcessor();
   }, [])
@@ -152,18 +160,22 @@ export default function MapInterface() {
           <Button>Search</Button>
           <Button type='button' onClick={() => dispatch({ type: 'CLEAR_MAP' })}>Clear</Button>
         </MainBar>
-        <Button onClick={() => dispatch({type: 'LOG_OUT'})}>Logout</Button>
+        <Button onClick={() => dispatch({ type: 'LOG_OUT' })}>Logout</Button>
       </MainBarContainer>
-      <SideMenu>
+      {/* <SideMenu>
         <h3>Results (0)</h3>
-                {globalState.dataRender ? globalState.dataRender.features.map(s => <SideMenuItem>{s.properties.name}</SideMenuItem>) : null}
-      </SideMenu>
+        {globalState.dataRender ? globalState.dataRender.features.map(s => <SideMenuItem>{s.properties.name}</SideMenuItem>) : null}
+      </SideMenu> */}
       <Container center={[51.505, -0.09]} zoom={13}>
         {globalState.dataRender
-          ? <GeoJSON key={Math.floor(Math.random() * 10000000)}
-            data={globalState.dataRender.features}
-            onEachFeature={onEachSubDivision}
-          />
+          ?
+          <>
+            <GeoJSON key={Math.floor(Math.random() * 10000000)}
+              data={globalState.dataRender.features}
+              onEachFeature={onEachSubDivision}
+            />
+            {/* <SetView coords={globalState.dataRender.features[0].geometry.coordinates[0][0][0]} /> FLY TO BUGGY! */}
+          </>
           : null}
 
         <TileLayer
