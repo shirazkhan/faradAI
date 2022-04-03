@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer } from 'react';
 
-function App() {
+export const GlobalStateContext = React.createContext();
+
+export default function App() {
+
+  const initialState = {
+    email: 'bob@hello.com',
+    password: '1234567890',
+    isAuthenticated: false
+  }
+
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case 'UPDATE_EMAIL':
+        return { ...state }
+      case 'UPDATE_PASSWORD':
+        return { ...state }
+      case 'TOGGLE_AUTHENTICATION':
+        return { ...state }
+    }
+  }
+
+  const [globalState, dispatch] = useReducer(reducer, initialState);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <GlobalStateContext.Provider value={{globalState, dispatch}}>
+      App
+    </GlobalStateContext.Provider>
+  )
 }
 
-export default App;
