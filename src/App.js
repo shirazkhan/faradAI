@@ -15,7 +15,8 @@ export default function App() {
     countryInput: '',
     subDivisionInput: '',
     dataRender: {},
-    flyTo: []
+    flyTo: [],
+    preProcessedData: null
   }
 
   const reducer = (state, action) => {
@@ -34,6 +35,8 @@ export default function App() {
         return { ...state, dataRender: action.value }
       case 'CLEAR_MAP':
         return { ...state, dataRender: '', subDivisionInput: '', countryInput: '' }
+      case 'PREPROCESS_DATA':
+        return { ...state, preProcessedData: action.value}
       default:
         throw new Error();
     }

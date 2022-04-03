@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet';
 import styled from 'styled-components';
 import { GlobalStateContext } from './App';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
+import { Search } from '@styled-icons/boxicons-regular/SearchAlt';
 
 const Container = styled(MapContainer)`
     height: 100vh;
@@ -12,10 +13,11 @@ const Container = styled(MapContainer)`
 `
 
 const MainBar = styled.form`
-    width: 80%;
+    width: 95%;
     height: 65px;
     position: absolute;
     z-index: 33;
+    border: 3px solid black;
     top: 10px;
     left: 55px;
     font-size: 24px;
@@ -46,6 +48,23 @@ export default function MapInterface() {
 
   const { globalState, dispatch } = useContext(GlobalStateContext);
 
+  const preProcessor = () =>
+    axios.get('admin1.json')
+    .then(res => {
+      const flatCoords = res.data.features.map(s => {
+        return { properties: s.properties, coordinates: s.geometry.coordinates[0].flat() }
+      })
+      dispatch({type: 'PREPROCESS_DATA', value: flatCoords})
+    })
+
+    const processData = () => {
+
+    }
+
+  useEffect(() => {
+    preProcessor();
+  }, [])
+
   const onEachSubDivision = (subdivision, layer) => {
     layer.bindPopup(subdivision.properties.name);
   }
@@ -61,8 +80,8 @@ export default function MapInterface() {
             globalState.subDivisionInput
               ? typeof s.properties.name === 'string' && s.properties.name.toLowerCase().includes(globalState.subDivisionInput.toLowerCase())
               : globalState.countryInput
-              ? s.properties.country.toLowerCase().includes(globalState.countryInput.toLowerCase())
-              : s
+                ? s.properties.country.toLowerCase().includes(globalState.countryInput.toLowerCase())
+                : s
           )
         }
         dispatch({ type: 'HANDLE_SEARCH', value: filteredData });
@@ -73,20 +92,20 @@ export default function MapInterface() {
   return (
     <>
       <MainBar onSubmit={handleSearch}>
-          <Input
-            value={globalState.subDivisionInput}
-            onChange={e => dispatch({ type: 'HANDLE_SUBDIVISION_INPUT', value: e.target.value })}
-            name='subdivision'
-            placeholder='Subdivision'>
-          </Input>
-          <Input
-            value={globalState.countryInput}
-            onChange={e => dispatch({ type: 'HANDLE_COUNTRY_INPUT', value: e.target.value })}
-            name='country'
-            placeholder='Country'>
-          </Input>
-          <Button>Search</Button>
-        <Button type = 'button' onClick={() => dispatch({ type: 'CLEAR_MAP' })}>Clear</Button>
+        <Input
+          value={globalState.subDivisionInput}
+          onChange={e => dispatch({ type: 'HANDLE_SUBDIVISION_INPUT', value: e.target.value })}
+          name='subdivision'
+          placeholder='Subdivision'>
+        </Input>
+        <Input
+          value={globalState.countryInput}
+          onChange={e => dispatch({ type: 'HANDLE_COUNTRY_INPUT', value: e.target.value })}
+          name='country'
+          placeholder='Country'>
+        </Input>
+        <Button>Search</Button>
+        <Button type='button' onClick={() => dispatch({ type: 'CLEAR_MAP' })}>Clear</Button>
       </MainBar>
       <Container center={[51.505, -0.09]} zoom={13}>
         {globalState.dataRender

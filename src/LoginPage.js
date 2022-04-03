@@ -40,8 +40,12 @@ const LoginBox = styled.form`
 
 const Input = styled.input`
     border-radius: 30px;
-    border: 2px solid black;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: saturate(180%) blur(10px);
+    border: none;
     height: 50px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    color: white;
     width: 50%;
     padding: 0 20px;
     font-size: 25px;
@@ -49,7 +53,10 @@ const Input = styled.input`
 
 const LoginButton = styled.button`
     border-radius: 30px;
-    border: 2px solid black;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: saturate(180%) blur(10px);
+    color: white;
+    border: none;
     height: 50px;
     width: 25%;
     padding: 0 20px 0 20px;
