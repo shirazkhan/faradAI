@@ -19,7 +19,6 @@ export default function App() {
       case 'UPDATE_PASSWORD':
         return { ...state, password: action.value }
       case 'CHECK_CREDENTIALS':
-
         return { ...state, isAuthenticated: true }
       default:
         throw new Error();

@@ -10,6 +10,7 @@
     "leaflet-react": "^3.0.5",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-leaflet": "^3.2.5",
     "react-scripts": "5.0.0",
     "styled-components": "^5.3.5",
     "web-vitals": "^2.1.4"
