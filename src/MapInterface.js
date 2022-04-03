@@ -92,7 +92,12 @@ export default function MapInterface() {
 
   const { globalState, dispatch } = useContext(GlobalStateContext);
 
-  const preProcessor = () =>
+  const processData = () => {
+
+  }
+
+  useEffect(() => {
+    const preProcessor = () =>
     axios.get('admin1.json')
       .then(res => {
         const flatCoords = res.data.features.map(s => {
@@ -101,11 +106,6 @@ export default function MapInterface() {
         dispatch({ type: 'PREPROCESS_DATA', value: flatCoords })
       })
 
-  const processData = () => {
-
-  }
-
-  useEffect(() => {
     preProcessor();
   }, [])
 
