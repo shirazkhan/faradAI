@@ -14,7 +14,7 @@ export default function App() {
     subDivisions: [],
     countryInput: '',
     subDivisionInput: '',
-    dataRender: {},
+    dataRender: null,
     flyTo: [],
     preProcessedData: null
   }
@@ -27,6 +27,8 @@ export default function App() {
         return { ...state, password: action.value }
       case 'CHECK_CREDENTIALS':
         return { ...state, isAuthenticated: true }
+      case 'LOG_OUT':
+        return { ...state, isAuthenticated: false }
       case 'HANDLE_SUBDIVISION_INPUT':
         return { ...state, subDivisionInput: action.value, countryInput: '' }
       case 'HANDLE_COUNTRY_INPUT':

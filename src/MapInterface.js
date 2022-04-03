@@ -1,10 +1,9 @@
 import React, { useEffect, useContext } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import styled from 'styled-components';
 import { GlobalStateContext } from './App';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
-import { Search } from '@styled-icons/boxicons-regular/SearchAlt';
 
 const Container = styled(MapContainer)`
     height: 100vh;
@@ -12,15 +11,21 @@ const Container = styled(MapContainer)`
     position: relative;
 `
 
-const MainBar = styled.form`
+const MainBarContainer = styled.div`
     width: 95%;
     height: 65px;
     position: absolute;
     z-index: 33;
-    border: 3px solid black;
     top: 10px;
     left: 55px;
     font-size: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+`;
+
+const MainBar = styled.form`
     display: flex;
     align-items: center;
     gap: 10px;
@@ -31,8 +36,10 @@ const Input = styled.input`
     width: 250px;
     font-size: 24px;
     border-radius: 25px;
-    border: 1px solid grey;
+    border: none;
     padding: 0 20px;
+    background: rgba(255,255,255,0.7);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 `;
 
 const Button = styled.button`
@@ -40,8 +47,45 @@ const Button = styled.button`
     width: 125px;
     font-size: 24px;
     border-radius: 25px;
-    border: 1px solid grey;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     padding: 0 20px;
+    background: rgba(255,255,255,0.7);
+`;
+
+const SideMenu = styled.div`
+    height: 500px;
+    width: 225px;
+    left: 12px;
+    top: 100px;
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(5px);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    position: absolute;
+    z-index: 66;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: scroll;
+    border-radius: 20px;
+    align-items: center;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+`;
+
+const SideMenuItem = styled.div`
+    background: rgba(255,255,255,0.7);
+    width: 120px;
+    height: 35px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 25px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 0 10px;
 `;
 
 export default function MapInterface() {
@@ -50,16 +94,16 @@ export default function MapInterface() {
 
   const preProcessor = () =>
     axios.get('admin1.json')
-    .then(res => {
-      const flatCoords = res.data.features.map(s => {
-        return { properties: s.properties, coordinates: s.geometry.coordinates[0].flat() }
+      .then(res => {
+        const flatCoords = res.data.features.map(s => {
+          return { properties: s.properties, coordinates: s.geometry.coordinates[0].flat() }
+        })
+        dispatch({ type: 'PREPROCESS_DATA', value: flatCoords })
       })
-      dispatch({type: 'PREPROCESS_DATA', value: flatCoords})
-    })
 
-    const processData = () => {
+  const processData = () => {
 
-    }
+  }
 
   useEffect(() => {
     preProcessor();
@@ -91,22 +135,29 @@ export default function MapInterface() {
 
   return (
     <>
-      <MainBar onSubmit={handleSearch}>
-        <Input
-          value={globalState.subDivisionInput}
-          onChange={e => dispatch({ type: 'HANDLE_SUBDIVISION_INPUT', value: e.target.value })}
-          name='subdivision'
-          placeholder='Subdivision'>
-        </Input>
-        <Input
-          value={globalState.countryInput}
-          onChange={e => dispatch({ type: 'HANDLE_COUNTRY_INPUT', value: e.target.value })}
-          name='country'
-          placeholder='Country'>
-        </Input>
-        <Button>Search</Button>
-        <Button type='button' onClick={() => dispatch({ type: 'CLEAR_MAP' })}>Clear</Button>
-      </MainBar>
+      <MainBarContainer>
+        <MainBar onSubmit={handleSearch}>
+          <Input
+            value={globalState.subDivisionInput}
+            onChange={e => dispatch({ type: 'HANDLE_SUBDIVISION_INPUT', value: e.target.value })}
+            name='subdivision'
+            placeholder='Subdivision'>
+          </Input>
+          <Input
+            value={globalState.countryInput}
+            onChange={e => dispatch({ type: 'HANDLE_COUNTRY_INPUT', value: e.target.value })}
+            name='country'
+            placeholder='Country'>
+          </Input>
+          <Button>Search</Button>
+          <Button type='button' onClick={() => dispatch({ type: 'CLEAR_MAP' })}>Clear</Button>
+        </MainBar>
+        <Button onClick={() => dispatch({type: 'LOG_OUT'})}>Logout</Button>
+      </MainBarContainer>
+      <SideMenu>
+        <h3>Results (0)</h3>
+                {globalState.dataRender ? globalState.dataRender.features.map(s => <SideMenuItem>{s.properties.name}</SideMenuItem>) : null}
+      </SideMenu>
       <Container center={[51.505, -0.09]} zoom={13}>
         {globalState.dataRender
           ? <GeoJSON key={Math.floor(Math.random() * 10000000)}
