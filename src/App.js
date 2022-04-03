@@ -9,7 +9,7 @@ export default function App() {
   const initialState = {
     email: '',
     password: '',
-    isAuthenticated: false,
+    isAuthenticated: true,
     countrys: [],
     subDivisions: [],
     countryInput: '',
@@ -30,6 +30,8 @@ export default function App() {
         return { ...state, subDivisionInput: action.value }
       case 'HANDLE_COUNTRY_INPUT':
         return { ...state, countryInput: action.value }
+      case 'HANDLE_SEARCH':
+        return { ...state, dataRender: action.value }
       default:
         throw new Error();
     }

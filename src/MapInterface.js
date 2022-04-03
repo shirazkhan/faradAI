@@ -50,10 +50,30 @@ export default function MapInterface() {
     layer.bindPopup(subdivision.properties.name);
   }
 
+  const handleSearch = e => {
+    e.preventDefault();
+    axios.get('admin1.json')
+    .then(res => {
+      const filteredData =
+      {
+          ...res.data,
+          features: res.data.features.filter(s =>
+              globalState.subDivisionInput
+                  ? typeof s.properties.name === 'string' && s.properties.name.toLowerCase().includes(globalState.subDivisionInput.toLowerCase())
+                  : globalState.countryInput
+                      ? s.properties.country.toLowerCase().includes(globalState.countryInput.toLowerCase())
+                      : s
+          )
+      }
+      dispatch({type: 'HANDLE_SEARCH', value: filteredData});
+    })
+    .catch(err => console.log(err))
+}
+
   return (
     <>
       <MainBar>
-        <form>
+        <form onSubmit={handleSearch}>
           <Input
             value={globalState.subDivisionInput}
             onChange={e => dispatch({ type: 'HANDLE_SUBDIVISION_INPUT', value: e.target.value })}
